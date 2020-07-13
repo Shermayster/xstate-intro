@@ -1,31 +1,31 @@
-let count = 0;
-const countEl = document.getElementById("count-number");
-
+baconst { interpret } = require("xstate");
+const { machine } = require("./machine");
 const incrementBtn = document.getElementById("increment-btn");
 const resetBtn = document.getElementById("reset-btn");
 
-checkButtons();
-incrementBtn.addEventListener("click", () => {
-  count++;
-  updateCount();
-  checkButtons();
-});
+const incrementService = interpret(machine)
+  .onTransition((state) => {
+    updateButtons(state.value);
+    updateCount(state.context.count);
+  })
+  .start();
 
-resetBtn.addEventListener("click", () => {
-  count = 0;
-  updateCount();
-  checkButtons();
-});
+incrementBtn.addEventListener(
+  "click",
+  () => void incrementService.send("INCREMENT")
+);
+resetBtn.addEventListener("click", () => void incrementService.send("RESET"));
 
-function updateCount() {
-  countEl.innerHTML = count;
+function updateCount(value) {
+  const countEl = document.getElementById("count-number");
+  countEl.innerHTML = value;
 }
 
-function checkButtons() {
-  if (count >= 5) {
+function updateButtons(stateValue) {
+  if (stateValue === "disabled") {
     disableBtn(incrementBtn);
     activateBtn(resetBtn);
-  } else {
+  } else if (stateValue === "active") {
     disableBtn(resetBtn);
     activateBtn(incrementBtn);
   }
