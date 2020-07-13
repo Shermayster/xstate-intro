@@ -3,7 +3,7 @@ const { machine } = require("./machine");
 const incrementBtn = document.getElementById("increment-btn");
 const resetBtn = document.getElementById("reset-btn");
 
-const incrementService = interpret(machine.withConfig())
+const incrementService = interpret(machine)
   .onTransition((state) => {
     updateButtons(state.value);
     updateCount(state.context.count);
