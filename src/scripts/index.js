@@ -1,4 +1,4 @@
-baconst { interpret } = require("xstate");
+const { interpret } = require("xstate");
 const { machine } = require("./machine");
 const incrementBtn = document.getElementById("increment-btn");
 const resetBtn = document.getElementById("reset-btn");
